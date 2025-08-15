@@ -1,0 +1,4 @@
+DB_NAME=your_db
+DB_USER=user
+DB_PASSWORD=password
+SECRET_KEY=your_secret_key
