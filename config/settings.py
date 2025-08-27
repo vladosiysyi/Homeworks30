@@ -30,6 +30,9 @@ AUTH_USER_MODEL = 'users.User'
 
 ALLOWED_HOSTS = []
 
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
 
 # Application definition
 
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
 'rest_framework',
 'users',
 'materials',
+'django_filters',
 ]
 
 MIDDLEWARE = [
