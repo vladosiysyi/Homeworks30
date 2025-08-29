@@ -3,13 +3,13 @@ from .models import Course, Lesson
 from .serializers import CourseSerializer, LessonSerializer
 
 class CourseViewSet(viewsets.ModelViewSet):
-    queryset = Course.objects.all()
+    queryset = Course.objects.prefetch_related('lessons').all()
     serializer_class = CourseSerializer
 
 class LessonListCreateAPIView(generics.ListCreateAPIView):
-    queryset = Lesson.objects.all()
+    queryset = Lesson.objects.select_related('course').all()
     serializer_class = LessonSerializer
 
 class LessonRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Lesson.objects.all()
+    queryset = Lesson.objects.select_related('course').all()
     serializer_class = LessonSerializer
