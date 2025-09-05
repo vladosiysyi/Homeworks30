@@ -31,7 +31,7 @@ AUTH_USER_MODEL = 'users.User'
 ALLOWED_HOSTS = []
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    'DEFAULT_FILTER_BACKENDS': ['rest_framework_simplejwt.authentication.JWTAuthentication', 'django_filters.rest_framework.DjangoFilterBackend']
 }
 
 # Application definition
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 'users',
 'materials',
 'django_filters',
+'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
