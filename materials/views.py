@@ -1,7 +1,7 @@
 from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, BasePermission
 from .models import Course, Lesson, Subscription
-from .serializers import LessonDetailSerializer, CourseSerializer
+from .serializers import LessonDetailSerializer, CourseSerializer, LessonSerializer
 from .permissions import IsModerator
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -36,8 +36,12 @@ class CourseViewSet(viewsets.ModelViewSet):
 
 class LessonListCreateAPIView(generics.ListCreateAPIView):
     queryset = Lesson.objects.select_related('course').all()
-    serializer_class = LessonDetailSerializer
     pagination_class = MaterialsPagination
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return LessonDetailSerializer  # для отображения
+        return LessonSerializer  # для создания (валидация YouTube)
 
     def perform_create(self, serializer):
         course_id = self.request.data.get('course')
@@ -50,10 +54,13 @@ class LessonListCreateAPIView(generics.ListCreateAPIView):
             return [IsAdminUser()]
         return [IsAuthenticated()]
 
-
 class LessonRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Lesson.objects.select_related('course').all()
-    serializer_class = LessonDetailSerializer
+
+    def get_serializer_class(self):
+        if self.request.method in ["PUT", "PATCH"]:
+            return LessonSerializer  # при редактировании включаем валидацию
+        return LessonDetailSerializer  # для просмотра
 
     def get_queryset(self):
         user = self.request.user
